@@ -41,15 +41,42 @@
       mix-blend-mode: multiply;
     }
 
-    /* ─── Ensō ring (SVG, replaces PNG brush divs) ───── */
-    #enso-ring {
+    /* ─── Background brush strokes ───────────────────── */
+    .brush-left, .brush-right {
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
       pointer-events: none;
       z-index: 0;
       mix-blend-mode: multiply;
-      overflow: visible;
+    }
+    /* Left "(" — brush-left.png natural C-curve */
+    .brush-left {
+      left: -15vw;
+      top: -5vh;
+      width: 55vw;
+      height: 110vh;
+      background-image: url("./brush-left.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: left top;
+      opacity: 0.85;
+    }
+    /* Right ")" — outer div is fixed (no transform = no WebKit bug) */
+    .brush-right {
+      right: -15vw;
+      top: -5vh;
+      width: 55vw;
+      height: 110vh;
+      opacity: 0.85;
+    }
+    /* Right inner — same PNG mirrored via scaleX(-1) on a non-fixed child */
+    .brush-right-inner {
+      width: 100%;
+      height: 100%;
+      background-image: url("./brush-left.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: right top;
+      transform: scaleX(-1);
     }
 
     /* ─── Page wrapper ────────────────────────────── */
@@ -402,43 +429,10 @@
 </head>
 <body>
 
-  <!-- Ensō ring: two SVG arcs form an incomplete oval around the content -->
-  <svg id="enso-ring"
-       xmlns="http://www.w3.org/2000/svg"
-       aria-hidden="true"
-       viewBox="0 0 1600 900"
-       preserveAspectRatio="xMidYMid meet">
-    <defs>
-      <filter id="enso-brush" x="-25%" y="-25%" width="150%" height="150%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.022 0.011"
-                      numOctaves="4" seed="7" result="noise"/>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="14"
-                           xChannelSelector="R" yChannelSelector="G"/>
-      </filter>
-    </defs>
-
-    <!-- Left arc: outer glow -->
-    <path d="M 820 40 C 444 40, 120 224, 120 450 C 120 676, 444 860, 820 860"
-          fill="none" stroke="#C8A960" stroke-width="68"
-          stroke-linecap="round" opacity="0.22"
-          filter="url(#enso-brush)"/>
-    <!-- Left arc: main stroke -->
-    <path d="M 820 40 C 444 40, 120 224, 120 450 C 120 676, 444 860, 820 860"
-          fill="none" stroke="#9B7535" stroke-width="40"
-          stroke-linecap="round" opacity="0.42"
-          filter="url(#enso-brush)"/>
-
-    <!-- Right arc: outer glow -->
-    <path d="M 780 40 C 1156 40, 1480 224, 1480 450 C 1480 676, 1156 860, 780 860"
-          fill="none" stroke="#C8A960" stroke-width="68"
-          stroke-linecap="round" opacity="0.22"
-          filter="url(#enso-brush)"/>
-    <!-- Right arc: main stroke -->
-    <path d="M 780 40 C 1156 40, 1480 224, 1480 450 C 1480 676, 1156 860, 780 860"
-          fill="none" stroke="#9B7535" stroke-width="40"
-          stroke-linecap="round" opacity="0.42"
-          filter="url(#enso-brush)"/>
-  </svg>
+  <div class="brush-left" aria-hidden="true"></div>
+  <div class="brush-right" aria-hidden="true">
+    <div class="brush-right-inner"></div>
+  </div>
 
   <main class="page" style="position:relative;z-index:2;">
 
