@@ -70,7 +70,6 @@
       height: 65vh;
       background-position: right bottom;
       opacity: 0.34;
-      transform: rotate(18deg);
     }
 
     /* ─── Page wrapper ────────────────────────────── */
@@ -589,11 +588,14 @@
 
       /* Parallax — brush strokes drift gently with scroll */
       var ticking = false;
+      var leftBrush  = document.querySelector('.brush-left');
+      var rightBrush = document.querySelector('.brush-right');
+
+      /* Set right brush initial rotation via JS to avoid WebKit fixed+blend bug */
+      if (rightBrush) rightBrush.style.transform = 'rotate(18deg) translateY(0px)';
 
       function updateParallax() {
         var scrollY = window.scrollY;
-        var leftBrush  = document.querySelector('.brush-left');
-        var rightBrush = document.querySelector('.brush-right');
         if (leftBrush)  leftBrush.style.transform  = 'translateY(' + (scrollY * 0.25) + 'px)';
         if (rightBrush) rightBrush.style.transform = 'rotate(18deg) translateY(' + (-scrollY * 0.22) + 'px)';
         ticking = false;
