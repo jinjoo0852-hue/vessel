@@ -55,19 +55,19 @@
     }
     .brush-left {
       background-image: url("./brush-left.png");
-      top: -5vh;
-      left: -14vw;
-      width: 48vw;
-      height: 110vh;
+      top: -8vh;
+      left: -22vw;
+      width: 55vw;
+      height: 126vh;
       background-position: left top;
-      opacity: 0.32;
+      opacity: 0.35;
     }
     .brush-right {
       background-image: url("./brush-right.png");
-      bottom: 4vh;
-      right: -4vw;
-      width: 58vw;
-      height: 65vh;
+      bottom: -10vh;
+      right: -20vw;
+      width: 88vw;
+      height: 88vh;
       background-position: right bottom;
       opacity: 0.34;
     }
@@ -592,12 +592,12 @@
       var rightBrush = document.querySelector('.brush-right');
 
       /* Set right brush initial rotation via JS to avoid WebKit fixed+blend bug */
-      if (rightBrush) rightBrush.style.transform = 'rotate(18deg) translateY(0px)';
+      if (rightBrush) rightBrush.style.transform = 'rotate(42deg) translateY(0px)';
 
       function updateParallax() {
         var scrollY = window.scrollY;
         if (leftBrush)  leftBrush.style.transform  = 'translateY(' + (scrollY * 0.25) + 'px)';
-        if (rightBrush) rightBrush.style.transform = 'rotate(18deg) translateY(' + (-scrollY * 0.22) + 'px)';
+        if (rightBrush) rightBrush.style.transform = 'rotate(42deg) translateY(' + (-scrollY * 0.22) + 'px)';
         ticking = false;
       }
 
