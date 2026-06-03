@@ -42,41 +42,42 @@
     }
 
     /* ─── Background brush strokes ───────────────────── */
+    /*
+      Strategy: very tall div (180vh, top -40vh) so arm-tips exit the
+      viewport vertically. Only the curved mid-section stays visible →
+      left shows "(", right shows ")".
+      Visible width each side = 55vw − 15vw offset = 40vw = 2/5 screen.
+    */
     .brush-left, .brush-right {
       position: fixed;
       pointer-events: none;
       z-index: 0;
       mix-blend-mode: multiply;
+      top: -40vh;
+      width: 55vw;
+      height: 180vh;
+      opacity: 0.625;
     }
-    /* Left "(" — natural C-curve, 85% size, pushed outside */
     .brush-left {
-      left: -22vw;
-      top: -5vh;
-      width: 47vw;
-      height: 93vh;
+      left: -15vw;
       background-image: url("./brush-left.png");
       background-repeat: no-repeat;
       background-size: contain;
       background-position: left top;
-      opacity: 0.25;
     }
-    /* Right ")" — outer fixed div, no transform (avoids WebKit bug) */
+    /* Right outer — position only, no transform (avoids WebKit bug) */
     .brush-right {
-      right: -22vw;
-      top: 10vh;
-      width: 44vw;
-      height: 88vh;
-      opacity: 0.25;
+      right: -15vw;
     }
-    /* Right inner — brush-right.png rotated CCW ~100° to arc like ")" */
+    /* Right inner — same PNG, mirrored to ")" via scaleX(-1) */
     .brush-right-inner {
       width: 100%;
       height: 100%;
-      background-image: url("./brush-right.png");
+      background-image: url("./brush-left.png");
       background-repeat: no-repeat;
       background-size: contain;
-      background-position: center;
-      transform: rotate(-100deg);
+      background-position: right top;
+      transform: scaleX(-1);
     }
 
     /* ─── Page wrapper ────────────────────────────── */
