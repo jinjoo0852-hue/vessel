@@ -42,6 +42,8 @@
     }
 
     /* ─── Background brush strokes ───────────────────── */
+    /* mix-blend-mode: multiply is required — PNG has white background.
+       multiply makes white invisible, leaving only the warm brush stroke. */
     .brush-left,
     .brush-right {
       position: fixed;
@@ -49,22 +51,23 @@
       background-size: contain;
       pointer-events: none;
       z-index: 0;
+      mix-blend-mode: multiply;
     }
     .brush-left {
       background-image: url("./brush-left.png");
-      top: -4vh;
-      left: -10vw;
-      width: 46vw;
-      height: 95vh;
+      top: -6vh;
+      left: -14vw;
+      width: 42vw;
+      height: 96vh;
       background-position: left top;
-      opacity: 0.38;
+      opacity: 0.28;
     }
     .brush-right {
       background-image: url("./brush-right.png");
-      bottom: 4vh;
-      right: -4vw;
-      width: 58vw;
-      height: 60vh;
+      bottom: 2vh;
+      right: -2vw;
+      width: 55vw;
+      height: 58vh;
       background-position: right bottom;
       opacity: 0.32;
     }
