@@ -56,20 +56,21 @@
     .brush-left {
       background-image: url("./brush-left.png");
       top: -5vh;
-      left: -8vw;
+      left: -14vw;
       width: 48vw;
       height: 110vh;
       background-position: left top;
-      opacity: 0.84;
+      opacity: 0.32;
     }
     .brush-right {
       background-image: url("./brush-right.png");
-      bottom: 0;
-      right: -10vw;
-      width: 50vw;
+      bottom: 4vh;
+      right: -4vw;
+      width: 58vw;
       height: 65vh;
       background-position: right bottom;
-      opacity: 0.96;
+      opacity: 0.34;
+      transform: rotate(18deg);
     }
 
     /* ─── Page wrapper ────────────────────────────── */
@@ -594,7 +595,7 @@
         var leftBrush  = document.querySelector('.brush-left');
         var rightBrush = document.querySelector('.brush-right');
         if (leftBrush)  leftBrush.style.transform  = 'translateY(' + (scrollY * 0.25) + 'px)';
-        if (rightBrush) rightBrush.style.transform = 'translateY(' + (-scrollY * 0.22) + 'px)';
+        if (rightBrush) rightBrush.style.transform = 'rotate(18deg) translateY(' + (-scrollY * 0.22) + 'px)';
         ticking = false;
       }
 
