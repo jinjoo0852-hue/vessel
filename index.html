@@ -53,7 +53,7 @@
       will-change: transform;
     }
     .brush-ul {
-      background-image: url("Untitled%20design.png");
+      background-image: url("./Untitled%20design.png");
       top: -18vh;
       left: -10vw;
       width: 52vw;
@@ -65,7 +65,7 @@
       -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 92%);
     }
     .brush-lr {
-      background-image: url("Untitled%20design.png");
+      background-image: url("./Untitled%20design.png");
       bottom: -6vh;
       right: -8vw;
       width: 44vw;
@@ -281,11 +281,15 @@
       display: grid;
       grid-template-rows: 0fr;
       transition: grid-template-rows 0.44s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
     }
     .accordion-item.open .accordion-body {
       grid-template-rows: 1fr;
     }
-    .accordion-body-inner { overflow: hidden; }
+    .accordion-body-inner {
+      overflow: hidden;
+      min-height: 0;
+    }
     .accordion-content { padding-bottom: 48px; }
 
     /* ─── Philosophy text ─────────────────────────── */
@@ -429,7 +433,7 @@
     <!-- ─── Hero ─────────────────────────────────── -->
     <header class="header">
       <div class="logo-mark">
-        <img src="logo.png" alt="VESSEL logo mark">
+        <img src="./logo.png" alt="VESSEL logo mark">
       </div>
       <h1 class="brand-name">VESSEL</h1>
       <div class="tagline-block">
