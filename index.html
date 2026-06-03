@@ -42,36 +42,35 @@
     }
 
     /* ─── Background brush strokes ───────────────────── */
-    .brush-ul,
-    .brush-lr {
+    .brush-left,
+    .brush-right {
       position: fixed;
       background-repeat: no-repeat;
+      background-size: contain;
       pointer-events: none;
       z-index: 0;
       mix-blend-mode: multiply;
-      filter: blur(0.5px);
+      filter: blur(0.4px);
     }
-    .brush-ul {
-      background-image: url("./Untitled design.png");
-      top: -18vh;
-      left: -10vw;
-      width: 52vw;
-      height: 130vh;
-      background-size: 260% auto;
+    .brush-left {
+      background-image: url("./brush-left.png");
+      top: -8vh;
+      left: -6vw;
+      width: 36vw;
+      height: auto;
+      min-height: 70vh;
       background-position: left top;
-      opacity: 0.72;
-      mask-image: linear-gradient(to bottom, black 55%, transparent 92%);
-      -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 92%);
+      opacity: 0.20;
     }
-    .brush-lr {
-      background-image: url("./Untitled design.png");
-      bottom: -6vh;
-      right: -8vw;
-      width: 44vw;
-      height: 55vh;
-      background-size: 260% auto;
+    .brush-right {
+      background-image: url("./brush-right.png");
+      bottom: 8vh;
+      right: -4vw;
+      width: 38vw;
+      height: auto;
+      min-height: 50vh;
       background-position: right bottom;
-      opacity: 0.48;
+      opacity: 0.15;
     }
 
     /* ─── Page wrapper ────────────────────────────── */
@@ -424,10 +423,10 @@
 </head>
 <body>
 
-  <div class="brush-ul" aria-hidden="true"></div>
-  <div class="brush-lr" aria-hidden="true"></div>
+  <div class="brush-left" aria-hidden="true"></div>
+  <div class="brush-right" aria-hidden="true"></div>
 
-  <main class="page">
+  <main class="page" style="position:relative;z-index:2;">
 
     <!-- ─── Hero ─────────────────────────────────── -->
     <header class="header">
@@ -589,14 +588,14 @@
     (function () {
 
       /* Parallax — brush strokes drift gently with scroll */
-      var brushUl = document.querySelector('.brush-ul');
-      var brushLr = document.querySelector('.brush-lr');
       var ticking = false;
 
       function updateParallax() {
         var scrollY = window.scrollY;
-        if (brushUl) brushUl.style.transform = 'translateY(' + (scrollY * 0.25) + 'px)';
-        if (brushLr) brushLr.style.transform = 'translateY(' + (-scrollY * 0.25) + 'px)';
+        var leftBrush  = document.querySelector('.brush-left');
+        var rightBrush = document.querySelector('.brush-right');
+        if (leftBrush)  leftBrush.style.transform  = 'translateY(' + (scrollY * 0.25) + 'px)';
+        if (rightBrush) rightBrush.style.transform = 'translateY(' + (-scrollY * 0.22) + 'px)';
         ticking = false;
       }
 
