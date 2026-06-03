@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VESSEL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Nothing+You+Could+Do&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+
+    /* ─── Reset ───────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ─── Body & Background ───────────────────────── */
+    body {
+      font-family: 'Jost', 'Segoe UI', sans-serif;
+      font-weight: 300;
+      color: #3A3530;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 96px 24px 110px;
+      position: relative;
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse 90% 55% at 50% 12%, #FAF5EC 0%, transparent 65%),
+        linear-gradient(175deg, #F5F0E6 0%, #EFE7D8 55%, #E8DFC9 100%);
+    }
+
+    /* Paper grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 220px 220px;
+      opacity: 0.038;
+      pointer-events: none;
+      z-index: 900;
+      mix-blend-mode: multiply;
+    }
+
+    /* ─── Background brush strokes ───────────────────── */
+    .brush-ul,
+    .brush-lr {
+      position: fixed;
+      background-repeat: no-repeat;
+      pointer-events: none;
+      z-index: 0;
+      mix-blend-mode: multiply;
+      filter: blur(0.5px);
+      will-change: transform;
+    }
+    .brush-ul {
+      background-image: url("Untitled%20design.png");
+      top: -18vh;
+      left: -10vw;
+      width: 52vw;
+      height: 130vh;
+      background-size: 260% auto;
+      background-position: left top;
+      opacity: 0.72;
+      mask-image: linear-gradient(to bottom, black 55%, transparent 92%);
+      -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 92%);
+    }
+    .brush-lr {
+      background-image: url("Untitled%20design.png");
+      bottom: -6vh;
+      right: -8vw;
+      width: 44vw;
+      height: 55vh;
+      background-size: 260% auto;
+      background-position: right bottom;
+      opacity: 0.48;
+    }
+
+    /* ─── Page wrapper ────────────────────────────── */
+    .page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    /* ─── Hero ────────────────────────────────────── */
+    .header {
+      text-align: center;
+      padding-bottom: 44px;
+    }
+
+    .logo-mark {
+      width: 300px;
+      height: 233px;
+      overflow: hidden;
+      margin: 0 auto 40px;
+    }
+    .logo-mark img {
+      width: 100%;
+      height: auto;
+      display: block;
+      mask-image: radial-gradient(circle at 50% 38%, black 48%, transparent 54%);
+      -webkit-mask-image: radial-gradient(circle at 50% 38%, black 48%, transparent 54%);
+    }
+
+    .brand-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 52px;
+      font-weight: 300;
+      letter-spacing: 20px;
+      color: #282420;
+      line-height: 1;
+      text-indent: 20px;
+    }
+
+    .tagline-block { margin-top: 28px; }
+    .sep {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .sep-line {
+      width: 64px;
+      height: 0.5px;
+      background: #C9A063;
+      opacity: 0.9;
+    }
+    .sep-diamond {
+      width: 4px;
+      height: 4px;
+      background: #C9A063;
+      opacity: 0.75;
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+    .tagline-en {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 25px;
+      font-weight: 400;
+      color: #3A3020;
+      letter-spacing: 0.4px;
+      margin-bottom: 10px;
+    }
+    .tagline-kr {
+      font-size: 18px;
+      font-weight: 400;
+      color: #596343;
+      letter-spacing: 1.2px;
+    }
+
+    /* ─── Quote (handwriting reveal) ─────────────────── */
+    .quote-block {
+      text-align: center;
+      padding: 44px 0 88px;
+    }
+    .quote-text {
+      font-family: 'Nothing You Could Do', cursive;
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.85;
+      color: #A37A3C;
+      letter-spacing: 0.02em;
+      opacity: 0.93;
+      max-width: 100%;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .quote-line { display: block; }
+    /* Subtle natural offset — barely perceptible baseline variation */
+    .quote-line:nth-child(1) { margin-left: -6px; }
+    .quote-line:nth-child(2) { margin-left:  4px; }
+
+    .quote-line-inner {
+      display: inline-block;
+      white-space: nowrap;
+      clip-path: inset(0 101% 0 0);
+    }
+
+    .quote-line:nth-child(1) .quote-line-inner {
+      animation: handWrite 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s both;
+    }
+    .quote-line:nth-child(2) .quote-line-inner {
+      animation: handWrite 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2.7s both;
+    }
+
+    @keyframes handWrite {
+      from { clip-path: inset(0 101% 0 0); }
+      to   { clip-path: inset(0 0%   0 0); }
+    }
+
+    /* Signature — 50% of quote size, right-leaning, quiet */
+    .quote-sig {
+      font-family: 'Nothing You Could Do', cursive;
+      font-size: 16px;
+      color: #A37A3C;
+      letter-spacing: 0.03em;
+      text-align: right;
+      padding-right: 9%;
+      margin-top: 6px;
+      opacity: 0;
+      animation: sigIn 0.8s ease 5.1s forwards;
+    }
+    @keyframes sigIn {
+      to { opacity: 0.93; }
+    }
+
+    .quote-rule {
+      width: 36px;
+      height: 0.5px;
+      background: #C9A063;
+      opacity: 0;
+      margin: 36px auto 0;
+      animation: ruleIn 0.7s ease 6.0s forwards;
+    }
+    @keyframes ruleIn {
+      to { opacity: 0.55; }
+    }
+
+    /* ─── Accordion ───────────────────────────────── */
+    .accordion { width: 100%; }
+
+    .accordion-item {
+      border-top: 0.5px solid rgba(201, 185, 154, 0.55);
+    }
+    .accordion-item:last-child {
+      border-bottom: 0.5px solid rgba(201, 185, 154, 0.55);
+    }
+
+    .accordion-header {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 26px 0;
+      text-align: left;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .accordion-header:focus { outline: none; }
+
+    .accordion-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #3A3020;
+      transition: color 0.22s;
+    }
+    .accordion-header:hover .accordion-title {
+      color: #18160F;
+    }
+
+    .accordion-icon {
+      font-size: 20px;
+      font-weight: 300;
+      color: #C9A063;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-left: 16px;
+      opacity: 0.75;
+      user-select: none;
+      font-family: 'Jost', sans-serif;
+      transition: opacity 0.22s, transform 0.3s ease;
+    }
+    .accordion-header:hover .accordion-icon {
+      opacity: 1;
+    }
+    .accordion-item:not(.open) .accordion-header:hover .accordion-icon {
+      transform: rotate(45deg);
+    }
+
+    /* Grid-row animation — no max-height hacks */
+    .accordion-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.44s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .accordion-item.open .accordion-body {
+      grid-template-rows: 1fr;
+    }
+    .accordion-body-inner { overflow: hidden; }
+    .accordion-content { padding-bottom: 48px; }
+
+    /* ─── Philosophy text ─────────────────────────── */
+    .body-kr {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 2.2;
+      color: #4A4035;
+      letter-spacing: 0.15px;
+    }
+    .body-kr + .body-kr { margin-top: 22px; }
+
+    /* ─── Coaching list ───────────────────────────── */
+    .coaching-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .coaching-item {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+    .coaching-num {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: #C9A063;
+      letter-spacing: 1px;
+      flex-shrink: 0;
+      margin-top: 3px;
+      opacity: 0.85;
+    }
+    .coaching-title {
+      font-size: 15px;
+      font-weight: 400;
+      color: #3A3020;
+      letter-spacing: 0.3px;
+      margin-bottom: 6px;
+    }
+    .coaching-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: #6B6055;
+      line-height: 1.85;
+    }
+
+    /* ─── Founder ─────────────────────────────────── */
+    .founder-quote {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 20px;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.9;
+      color: #4A4035;
+      margin-bottom: 28px;
+    }
+    .founder-bio {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 2.1;
+      color: #6B6055;
+      letter-spacing: 0.1px;
+      margin-bottom: 28px;
+    }
+    .founder-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 17px;
+      font-weight: 400;
+      color: #3A3020;
+      letter-spacing: 0.8px;
+    }
+    .founder-role {
+      font-size: 10px;
+      font-weight: 300;
+      color: #A8957E;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 7px;
+    }
+
+    /* ─── Contact ─────────────────────────────────── */
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .contact-label {
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #596343;
+      opacity: 0.8;
+    }
+    .contact-value {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 22px;
+      font-weight: 300;
+      color: #4A4035;
+      letter-spacing: 0.5px;
+      border-bottom: 0.5px solid transparent;
+      transition: color 0.3s, border-color 0.3s;
+      display: inline-block;
+    }
+    .contact-item:hover .contact-value {
+      color: #C9A063;
+      border-bottom-color: rgba(201, 160, 99, 0.4);
+    }
+
+    /* ─── Footer ──────────────────────────────────── */
+    .footer {
+      padding-top: 72px;
+      text-align: center;
+    }
+    .footer-text {
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #A8957E;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="brush-ul" aria-hidden="true"></div>
+  <div class="brush-lr" aria-hidden="true"></div>
+
+  <main class="page">
+
+    <!-- ─── Hero ─────────────────────────────────── -->
+    <header class="header">
+      <div class="logo-mark">
+        <img src="logo.png" alt="VESSEL logo mark">
+      </div>
+      <h1 class="brand-name">VESSEL</h1>
+      <div class="tagline-block">
+        <div class="sep">
+          <span class="sep-line"></span>
+          <span class="sep-diamond"></span>
+          <span class="sep-line"></span>
+        </div>
+        <p class="tagline-en">Become More, Inspire More</p>
+        <p class="tagline-kr">성장하고, 세상에 영감을 남기다</p>
+      </div>
+    </header>
+
+    <!-- ─── Quote ───────────────────────────────────── -->
+    <div class="quote-block">
+      <p class="quote-text">
+        <span class="quote-line"><span class="quote-line-inner">A vessel is valuable</span></span>
+        <span class="quote-line"><span class="quote-line-inner">because of what it can become.</span></span>
+      </p>
+      <p class="quote-sig">— J.</p>
+      <div class="quote-rule"></div>
+    </div>
+
+    <!-- ─── Accordion ─────────────────────────────── -->
+    <div class="accordion">
+
+      <!-- 1. PHILOSOPHY — open by default -->
+      <div class="accordion-item open">
+        <button class="accordion-header" aria-expanded="true">
+          <span class="accordion-title">Philosophy</span>
+          <span class="accordion-icon">−</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <div class="accordion-content">
+              <p class="body-kr">
+                VESSEL은 몸을 단련하는 일을 넘어,<br>
+                한 사람이 자신 안의 가능성을 발견하고<br>
+                더 나은 삶의 방향으로 성장하도록 돕는 브랜드입니다.
+              </p>
+              <p class="body-kr">
+                우리는 운동을 통해 몸을 만들고,<br>
+                기록을 통해 변화를 확인하며,<br>
+                꾸준함을 통해 삶의 태도를 바꿉니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. COACHING SYSTEM -->
+      <div class="accordion-item">
+        <button class="accordion-header" aria-expanded="false">
+          <span class="accordion-title">Coaching System</span>
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <div class="accordion-content">
+              <ul class="coaching-list">
+                <li class="coaching-item">
+                  <span class="coaching-num">01</span>
+                  <div>
+                    <p class="coaching-title">개인 맞춤 운동 수업</p>
+                    <p class="coaching-desc">회원님의 몸 상태, 목표, 생활 패턴에 맞춰 수업을 설계합니다.</p>
+                  </div>
+                </li>
+                <li class="coaching-item">
+                  <span class="coaching-num">02</span>
+                  <div>
+                    <p class="coaching-title">Notion 기록 관리</p>
+                    <p class="coaching-desc">수업 내용, 중량, 피드백, 변화 과정을 기록합니다.</p>
+                  </div>
+                </li>
+                <li class="coaching-item">
+                  <span class="coaching-num">03</span>
+                  <div>
+                    <p class="coaching-title">운동 영상 제공</p>
+                    <p class="coaching-desc">수업 후에도 스스로 복습할 수 있도록 운동 영상을 제공합니다.</p>
+                  </div>
+                </li>
+                <li class="coaching-item">
+                  <span class="coaching-num">04</span>
+                  <div>
+                    <p class="coaching-title">식단 &amp; 생활 피드백</p>
+                    <p class="coaching-desc">무리한 제한보다 지속 가능한 식사와 생활 습관을 함께 만듭니다.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. FOUNDER -->
+      <div class="accordion-item">
+        <button class="accordion-header" aria-expanded="false">
+          <span class="accordion-title">Founder</span>
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <div class="accordion-content">
+              <p class="founder-quote">
+                운동은 수단입니다.<br>
+                목적은 언제나 더 나은 사람이 되는 것.
+              </p>
+              <p class="founder-bio">
+                피트니스 코치이자 러너로서,<br>
+                몸을 단련하는 일이 곧 삶의 태도를 만든다고 믿습니다.<br>
+                VESSEL은 그 믿음에서 시작되었습니다.
+              </p>
+              <p class="founder-name">Juhyeon Jeong</p>
+              <p class="founder-role">Fitness Coach · Runner</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. CONTACT -->
+      <div class="accordion-item">
+        <button class="accordion-header" aria-expanded="false">
+          <span class="accordion-title">Contact</span>
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <div class="accordion-content">
+              <div class="contact-list">
+                <a href="tel:+821094579708" class="contact-item">
+                  <span class="contact-label">Phone</span>
+                  <span class="contact-value">010-9457-9708</span>
+                </a>
+                <a href="https://www.instagram.com/jeong_juliaaa" target="_blank" rel="noopener noreferrer" class="contact-item">
+                  <span class="contact-label">Instagram</span>
+                  <span class="contact-value">@jeong_juliaaa</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── Footer ───────────────────────────────── -->
+    <footer class="footer">
+      <p class="footer-text">Made with Claude Code</p>
+    </footer>
+
+  </main>
+
+  <script>
+    (function () {
+
+      /* Parallax — brush strokes move at 28% of scroll speed */
+      var ul = document.querySelector('.brush-ul');
+      var lr = document.querySelector('.brush-lr');
+      var lastY = 0;
+      window.addEventListener('scroll', function () {
+        var y = window.scrollY;
+        if (y === lastY) return;
+        lastY = y;
+        var o = (y * 0.28).toFixed(2);
+        ul.style.transform = 'translateY(' + o + 'px)';
+        lr.style.transform = 'translateY(-' + o + 'px)';
+      }, { passive: true });
+
+      /* Accordion — one open at a time */
+      var items = Array.prototype.slice.call(document.querySelectorAll('.accordion-item'));
+      items.forEach(function (item) {
+        item.querySelector('.accordion-header').addEventListener('click', function () {
+          var isOpen = item.classList.contains('open');
+          items.forEach(function (i) {
+            i.classList.remove('open');
+            i.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+            i.querySelector('.accordion-icon').textContent = '+';
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            item.querySelector('.accordion-header').setAttribute('aria-expanded', 'true');
+            item.querySelector('.accordion-icon').textContent = '−';
+          }
+        });
+      });
+
+    })();
+  </script>
+</body>
+</html>
