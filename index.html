@@ -48,35 +48,35 @@
       z-index: 0;
       mix-blend-mode: multiply;
     }
-    /* Left "(" — brush-left.png natural C-curve */
+    /* Left "(" — natural C-curve, 85% size, pushed outside */
     .brush-left {
-      left: -15vw;
+      left: -22vw;
       top: -5vh;
-      width: 55vw;
-      height: 110vh;
+      width: 47vw;
+      height: 93vh;
       background-image: url("./brush-left.png");
       background-repeat: no-repeat;
       background-size: contain;
       background-position: left top;
-      opacity: 0.85;
+      opacity: 0.25;
     }
-    /* Right ")" — outer div is fixed (no transform = no WebKit bug) */
+    /* Right ")" — outer fixed div, no transform (avoids WebKit bug) */
     .brush-right {
-      right: -15vw;
-      top: -5vh;
-      width: 55vw;
-      height: 110vh;
-      opacity: 0.85;
+      right: -22vw;
+      top: 10vh;
+      width: 44vw;
+      height: 88vh;
+      opacity: 0.25;
     }
-    /* Right inner — same PNG mirrored via scaleX(-1) on a non-fixed child */
+    /* Right inner — brush-right.png rotated CCW ~100° to arc like ")" */
     .brush-right-inner {
       width: 100%;
       height: 100%;
-      background-image: url("./brush-left.png");
+      background-image: url("./brush-right.png");
       background-repeat: no-repeat;
       background-size: contain;
-      background-position: right top;
-      transform: scaleX(-1);
+      background-position: center;
+      transform: rotate(-100deg);
     }
 
     /* ─── Page wrapper ────────────────────────────── */
