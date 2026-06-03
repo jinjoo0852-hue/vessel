@@ -21,7 +21,7 @@
       align-items: center;
       padding: 96px 24px 110px;
       position: relative;
-      overflow-x: hidden;
+      overflow-x: clip;
       background:
         radial-gradient(ellipse 90% 55% at 50% 12%, #FAF5EC 0%, transparent 65%),
         linear-gradient(175deg, #F5F0E6 0%, #EFE7D8 55%, #E8DFC9 100%);
@@ -50,10 +50,9 @@
       z-index: 0;
       mix-blend-mode: multiply;
       filter: blur(0.5px);
-      will-change: transform;
     }
     .brush-ul {
-      background-image: url("./Untitled%20design.png");
+      background-image: url("./Untitled design.png");
       top: -18vh;
       left: -10vw;
       width: 52vw;
@@ -65,7 +64,7 @@
       -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 92%);
     }
     .brush-lr {
-      background-image: url("./Untitled%20design.png");
+      background-image: url("./Untitled design.png");
       bottom: -6vh;
       right: -8vw;
       width: 44vw;
@@ -589,17 +588,23 @@
   <script>
     (function () {
 
-      /* Parallax — brush strokes move at 28% of scroll speed */
-      var ul = document.querySelector('.brush-ul');
-      var lr = document.querySelector('.brush-lr');
-      var lastY = 0;
+      /* Parallax — brush strokes drift gently with scroll */
+      var brushUl = document.querySelector('.brush-ul');
+      var brushLr = document.querySelector('.brush-lr');
+      var ticking = false;
+
+      function updateParallax() {
+        var scrollY = window.scrollY;
+        if (brushUl) brushUl.style.transform = 'translateY(' + (scrollY * 0.25) + 'px)';
+        if (brushLr) brushLr.style.transform = 'translateY(' + (-scrollY * 0.25) + 'px)';
+        ticking = false;
+      }
+
       window.addEventListener('scroll', function () {
-        var y = window.scrollY;
-        if (y === lastY) return;
-        lastY = y;
-        var o = (y * 0.28).toFixed(2);
-        ul.style.transform = 'translateY(' + o + 'px)';
-        lr.style.transform = 'translateY(-' + o + 'px)';
+        if (!ticking) {
+          requestAnimationFrame(updateParallax);
+          ticking = true;
+        }
       }, { passive: true });
 
       /* Accordion — one open at a time */
