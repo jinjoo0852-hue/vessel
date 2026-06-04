@@ -53,23 +53,28 @@
       pointer-events: none;
       z-index: 0;
       mix-blend-mode: multiply;
+    }
+    /* Left "(": visible 20vw (1/2 of prev 40vw).
+       Shift to left:-35vw so arm-tips stay off-screen top/bottom. */
+    .brush-left {
+      left: -35vw;
       top: -40vh;
       width: 55vw;
-      height: 180vh;
-      opacity: 0.625;
-    }
-    .brush-left {
-      left: -15vw;
+      height: 120vh;
       background-image: url("./brush-left.png");
       background-repeat: no-repeat;
       background-size: contain;
       background-position: left top;
+      opacity: 0.625;
     }
-    /* Right outer — position only, no transform (avoids WebKit bug) */
+    /* Right ")": visible 27vw (2/3 of prev 40vw). Top end visible. */
     .brush-right {
-      right: -15vw;
+      right: -28vw;
+      top: 5vh;
+      width: 55vw;
+      height: 120vh;
+      opacity: 0.625;
     }
-    /* Right inner — same PNG, mirrored to ")" via scaleX(-1) */
     .brush-right-inner {
       width: 100%;
       height: 100%;
