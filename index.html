@@ -59,18 +59,24 @@
       top: 8vh;
       width: 52vw;
       height: 345vh;
+      opacity: 0.28;
+    }
+    .brush-left-inner {
+      width: 100%;
+      height: 100%;
       background-image: url("./brush-left.png");
       background-repeat: no-repeat;
       background-size: contain;
       background-position: left top;
-      opacity: 0.22;
+      transform: rotate(-15deg);
+      transform-origin: center center;
     }
     .brush-right {
       right: -20vw;
       top: 28vh;
-      width: 35vw;
-      height: 118vh;
-      opacity: 0.22;
+      width: 52vw;
+      height: 345vh;
+      opacity: 0.28;
     }
     .brush-right-inner {
       width: 100%;
@@ -79,7 +85,8 @@
       background-repeat: no-repeat;
       background-size: contain;
       background-position: right top;
-      transform: scaleX(-1);
+      transform: scaleX(-1) rotate(-15deg);
+      transform-origin: center center;
     }
 
     /* ─── Page wrapper ────────────────────────────── */
@@ -432,7 +439,9 @@
 </head>
 <body>
 
-  <div class="brush-left" aria-hidden="true"></div>
+  <div class="brush-left" aria-hidden="true">
+    <div class="brush-left-inner"></div>
+  </div>
   <div class="brush-right" aria-hidden="true">
     <div class="brush-right-inner"></div>
   </div>
