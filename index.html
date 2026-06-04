@@ -54,13 +54,12 @@
       z-index: 0;
       mix-blend-mode: multiply;
     }
-    /* Left "(": visible 20vw (1/2 of prev 40vw).
-       Shift to left:-35vw so arm-tips stay off-screen top/bottom. */
+    /* Left "(": visible 40vw = 2/5 screen. width(55) - abs(left)(15) = 40vw. */
     .brush-left {
-      left: -35vw;
+      left: -15vw;
       top: -40vh;
       width: 55vw;
-      height: 120vh;
+      height: 180vh;
       background-image: url("./brush-left.png");
       background-repeat: no-repeat;
       background-size: contain;
